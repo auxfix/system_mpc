@@ -1,11 +1,27 @@
 from fastmcp import FastMCP
 import platform
+import psutil
 import os
 import sys
 
 mcp = FastMCP("My MCP Server")
 
-@mcp.tool()
+
+
+@mcp.tool
+def get_discs() -> str:
+    """
+    Retrieves list of all discs in computer.
+    """
+    partitions = psutil.disk_partitions()
+    discs = []
+    for p in partitions:
+        discs.append(f"Device: {p.device}, Mountpoint: {p.mountpoint}, FileSystem: {p.fstype}")
+    
+    return "\n".join(discs)
+
+
+@mcp.tool
 def get_system_info() -> str:
     """
     Retrieves comprehensive OS, hardware, and runtime environment details.
