@@ -1,7 +1,11 @@
 from fastmcp import FastMCP
+import platform
+import os
+import sys
 
 mcp = FastMCP("My MCP Server")
 
+@mcp.tool()
 def get_system_info() -> str:
     """
     Retrieves comprehensive OS, hardware, and runtime environment details.
