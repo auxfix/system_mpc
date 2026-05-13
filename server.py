@@ -4,8 +4,17 @@ import psutil
 import os
 import sys
 
-mcp = FastMCP("My MCP Server")
+mcp = FastMCP("System Info MPC")
 
+@mcp.tool
+def get_list_of_dirs(path :str) -> str:
+    """
+    Retrieves list of dirs in specific path
+    """
+    with os.scandir(path) as entries:
+        dirs = [f"{path}{entry.name}" for entry in entries if entry.is_dir()]
+    
+    return "\n".join(dirs)
 
 
 @mcp.tool
@@ -19,7 +28,6 @@ def get_discs() -> str:
         discs.append(f"Device: {p.device}, Mountpoint: {p.mountpoint}, FileSystem: {p.fstype}")
     
     return "\n".join(discs)
-
 
 @mcp.tool
 def get_system_info() -> str:
