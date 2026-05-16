@@ -3,6 +3,7 @@ import platform
 import psutil
 import os
 import sys
+import json
 
 mcp = FastMCP("System Info MPC")
 
@@ -15,6 +16,17 @@ def get_list_of_dirs(path :str) -> str:
         dirs = [f"{path}{entry.name}" for entry in entries if entry.is_dir()]
     
     return "\n".join(dirs)
+
+
+@mcp.resource("data://system_discs")
+def get_sytem_discs() -> str:
+    """Provides all system discs"""
+    partitions = psutil.disk_partitions()
+    discs = []
+    for p in partitions:
+        discs.append(f"Device: {p.device}, Mountpoint: {p.mountpoint}, FileSystem: {p.fstype}")
+    
+    return json.dumps(discs)
 
 
 @mcp.tool
